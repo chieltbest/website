@@ -1,0 +1,97 @@
+\documentclass{article}
+
+\usepackage{environ}
+\usepackage{makeidx}
+\usepackage{hyperref}
+\usepackage{minted}
+\usepackage[dvipsnames]{xcolor}
+
+\usepackage{totcount}
+\regtotcounter{section}
+\makeatletter
+	\renewcommand{\thesection}{\number\numexpr\c@section@totc-\c@section+1\relax}
+\makeatother
+\providecommand{\sectionautorefname}[1]{Post ~}
+
+\providecommand{\post}[2]{\HCode{<hr>}\Link{#2}{#2}\section{#1}\EndLink}
+
+\definecolor{commentgray}{gray}{0.5}
+\NewEnviron{comment}{
+	\begin{quote}
+	\textcolor{commentgray}{\BODY}
+	\end{quote}}
+
+\setlength{\parindent}{0ex}
+
+
+\title{Chiel Douwes' TMP blog}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+
+\post{Introduction}{intro}
+Just in time for the christmas festivities, I bring you: my TMP blog!
+My name is Chiel Douwes and you might know me as the maintainer of the current fastest
+metaprogramming library \href{https://github.com/kvasir-io/mpl}{kvasir::mpl}, author of the first
+parameterized metaprogramming unit testing library \href{https://github.com/chieltbest/metacheck}{metacheck},
+or just that one guy. Anyhow, as you are currently reading
+this blog, you probably have some intrest in it which is why I'd like to give a short
+introduction on what this blog is going to contain and how it is produced.
+
+\subsection*{Content}
+All of the posts here will be concise (as you can probably tell by this post) and informative,
+about various subjects that interest me, which will probably mostly be all things meta.
+\begin{comment}
+In fact, this first post is in essence a meta-post
+\end{comment}
+When I'm working on a project and it could interest other people, I will probably make a post
+about it here for your enjoyment.
+\begin{comment}
+Of which there already are several subjects lined up
+\end{comment}
+
+\subsection*{Production}
+This website is made using \href{https://github.com/michal-h21/make4ht}{make4ht}
+which can generate html files from \LaTeX sources. Make4ht (with tex4ht as backend) supports all the
+commands needed for the packages used, and has extra commands to add custom html to the code.
+There are some packages that are used to achieve special requirements, like \verb|minted| for code
+highlighting:
+\begin{minted}{cpp}
+template<template<typename...> class F, typename State, typename ...>
+struct fold_impl {
+    using type = State;
+}
+
+template<template<typename...> class F, typename State, typename T, typename ...Ts>
+struct fold_impl {
+    using type = fold_impl<F, F<State, T>, Ts...>;
+}
+\end{minted}
+Packages like \verb|environ| and \verb|xcolor| are also used to make fancy block comments.
+\begin{comment}
+Like this one
+\end{comment}
+And because the default font is kind of lame and inconsistent across devices, I opted to use
+the \href{http://mozilla.github.io/Fira/}{Fira Sans} font for text,
+and the awesome \href{https://github.com/tonsky/FiraCode}{Fira Code} for monospace text.\\
+All this is built by use of a CMake script, keeping track of the different files that have
+changed and allowing for easier integration into my editor.
+
+The entire website is available on \href{https://github.com/chieltbest/website}{github}, where
+you can find the build script, the configuration and also all the posts in raw source form.
+
+\subsection*{Conclusion}
+In conclusion, making a website in latex is a fun, but somewhat impractical way to put stuff on
+the internet. Since I like fun and impractical things this seems like the perfect exercise, but
+if you're aiming at an easily maintainable website then you should probably go for some other
+solution. If you have any comments to make about the layout or readability of this website, feel
+free to leave it on \href{https://twitter.com/chieltbest}{twitter}, as I'm not planning to
+implement a comment section any time soon.\\
+More posts will follow soon(ish) about subjects that are more closely related to c++.
+
+\end{document}
+
+%\abstract{test}
